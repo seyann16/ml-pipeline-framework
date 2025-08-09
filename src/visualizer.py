@@ -38,6 +38,42 @@ class DataVisualizer:
         plt.close()
         print("Saved correlation_matrix.png")
         
+    def plot_feature_importance(model, feature_names, top_n=18):
+        """
+        Plot top n feature importances
+        
+        Args:
+            model: trained model with .feature_imporances_
+            feature_names: list of features
+            top_n: number of top features to show
+        """
+        try:
+            importances = model.feature_importances_
+            # argsort returns the indices that would sort the array in ascending order
+            # [::-1] reverses the order to descending
+            # [:top_n] selects the top n indices
+            indices = importances.argsort()[::-1][:top_n]
+            plt.figure(figsize=(12, 8))
+            plt.title("Top Feature Importances")
+            # range(top_n) creates a list of positions on the x-axis
+            # importances[indices] gets the importance values for the top n features
+            plt.bar(range(top_n), importances[indices], align='center')
+            # plt.xtiks set or get x-axis labels in a Matplotlib chart.
+            # [features_names[i] for i in indices] picks the top N feature names based on importance
+            # rotation = 45 rotates the labels 45 degrees (to avoid overlapping)
+            plt.xtiks(range(top_n), [feature_names[i] for i in indices], rotation=45)
+            plt.xlim([-1, top_n])
+            # automatically adjusts the spacing
+            plt.tight_layout()
+            # save the figure
+            plt.savefig("feature_importance.png")
+            plt.close()
+            print("Saved feature_importance.png")
+        except AttributeError:
+            print("This model doesn't support feature_importances_")
+        except Exception as e:
+            print(f"Feature importance plot failed: {str(e)}")
+        
 # Test the visualizer
 if __name__ == "__main__":
     from data_loader import load_data

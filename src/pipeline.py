@@ -24,7 +24,7 @@ class MLPipeline:
                 self.visualize_data()
                 # phase 3: train model
                 trainer = ModelTrainer()
-                self.model = trainer.train(self.data, self.target_column)
+                self.model = trainer.train(self.data, self.target_column, save_path="trained_model.pkl")
                 return self.model
         return None
     
@@ -35,6 +35,10 @@ class MLPipeline:
         DataVisualizer.plot_feature_distribution(self.clean_data, self.target_column)
         # visualize correlations
         DataVisualizer.plot_correlation_matrix(self.clean_data)
+        # plot feature importance
+        # columns.list() converts the column names of a DataFrame into a regular Python list
+        feature_names = self.clean_data.drop(columns=[self.target_column]).columns.tolist()
+        DataVisualizer.plot_feature_importance(self.model, feature_names)
         
 # run full pipeline
 if __name__ == "__main__":

@@ -1,2 +1,2 @@
-src/generate_features
+src/generate_features.py
 *.png
